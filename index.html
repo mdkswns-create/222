@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가위바위보 게임</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f4f6f9; }
+        .card { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); text-align: center; width: 340px; }
+        h1 { font-size: 1.5rem; color: #333; margin-bottom: 1.5rem; }
+        .score-board { display: flex; justify-content: space-around; background: #f8fafc; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; }
+        .score-item { display: flex; flex-direction: column; gap: 4px; }
+        .score-item .label { font-size: 0.8rem; color: #64748b; }
+        .score-item .value { font-size: 1.25rem; font-weight: bold; color: #1e293b; }
+        .buttons { display: flex; justify-content: center; gap: 12px; margin-bottom: 1.5rem; }
+        .btn { font-size: 2rem; border: 2px solid #e2e8f0; background: white; padding: 0.8rem; border-radius: 12px; cursor: pointer; transition: all 0.2s; width: 80px; }
+        .btn:hover { transform: translateY(-3px); border-color: #3b82f6; background: #eff6ff; }
+        .display-area { font-size: 1.1rem; font-weight: 600; min-height: 60px; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+        .win { color: #16a34a; }
+        .lose { color: #dc2626; }
+        .draw { color: #d97706; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>✌️✊🖐️ 가위바위보</h1>
+        <div class="score-board">
+            <div class="score-item"><span class="label">승리</span><span class="value" id="wins">0</span></div>
+            <div class="score-item"><span class="label">무승부</span><span class="value" id="draws">0</span></div>
+            <div class="score-item"><span class="label">패배</span><span class="value" id="losses">0</span></div>
+        </div>
+        <div class="buttons">
+            <button class="btn" onclick="play('가위')">✌️</button>
+            <button class="btn" onclick="play('바위')">✊</button>
+            <button class="btn" onclick="play('보')">🖐️</button>
+        </div>
+        <div class="display-area" id="display">선택해 주세요!</div>
+    </div>
+
+    <script>
+        const choices = { '가위': '✌️', '바위': '✊', '보': '🖐️' };
+        let scores = { win: 0, draw: 0, loss: 0 };
+
+        function play(userChoice) {
+            const keys = Object.keys(choices);
+            const compChoice = keys[Math.floor(Math.random() * keys.length)];
+            const display = document.getElementById('display');
+            
+            let resultText = `나 ${choices[userChoice]} vs 컴퓨터 ${choices[compChoice]}<br>`;
+            
+            if (userChoice === compChoice) {
+                scores.draw++;
+                resultText += `<span class="draw">무승부입니다!</span>`;
+            } else if (
+                (userChoice === '가위' && compChoice === '보') ||
+                (userChoice === '바위' && compChoice === '가위') ||
+                (userChoice === '보' && compChoice === '바위')
+            ) {
+                scores.win++;
+                resultText += `<span class="win">🎉 이겼습니다!</span>`;
+            } else {
+                scores.loss++;
+                resultText += `<span class="lose">😭 졌습니다.</span>`;
+            }
+            
+            document.getElementById('wins').textContent = scores.win;
+            document.getElementById('draws').textContent = scores.draw;
+            document.getElementById('losses').textContent = scores.loss;
+            display.innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>
